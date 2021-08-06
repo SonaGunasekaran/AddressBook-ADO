@@ -7,6 +7,8 @@ namespace AddressBookADO
         static void Main(string[] args)
         {
             Console.WriteLine("Address Book ADO!");
+            AddressBookRepo repo = new AddressBookRepo();
+            repo.GetAllData();
         }
     }
 }
