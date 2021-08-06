@@ -7,7 +7,15 @@ namespace AddressBookADO
 {
     class AddressBookDetails
     {
-        public static string connectionString = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=Address_Book;Integrated Security=True;";
-        SqlConnection sqlConnection = new SqlConnection(connectionString);
+        public int Id { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+        public string Address { get; set; }
+        public string State { get; set; }
+        public string City { get; set; }
+        public string ZipCode { get; set; }
+        public double PhoneNumber { get; set; }
+        public string Email { get; set; }
+
     }
 }
