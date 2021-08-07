@@ -5,7 +5,7 @@ using System.Data.SqlClient;
 
 namespace AddressBookADO
 {
-    class AddressBookDetails
+    public class AddressBookDetails
     {
         public int Id { get; set; }
         public string FirstName { get; set; }
