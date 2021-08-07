@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Data.SqlClient;
+using System.Configuration;
 
 namespace AddressBookADO
 {
@@ -61,6 +62,7 @@ namespace AddressBookADO
             {
                 try
                 {
+
                     SqlCommand sqlCommand = new SqlCommand("dbo.InsertAddressBook", sqlConnection);
                     sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
                     sqlConnection.Open();
@@ -92,6 +94,38 @@ namespace AddressBookADO
                 return count;
             }
         }
+        public int EditDetails(AddressBookDetails details)
+        {
+            int count = 0;
+
+            try
+            {
+                using (this.sqlConnection)
+                {
+                    GetAllData();
+                    this.sqlConnection.Open();
+                    string query = @"update Address_Book_Table set Address='MysticFalls'where FirstName='Damon'";
+                    SqlCommand sqlCommand = new SqlCommand(query, this.sqlConnection);
+
+                    int result = sqlCommand.ExecuteNonQuery();
+                    if (result != 0)
+                    {
+                        count++;
+                        Console.WriteLine("Updated SuccessFully");
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
+            finally
+            {
+                this.sqlConnection.Close();
+            }
+            return count;
+        }
+    
 
         public AddressBookDetails ReadData(AddressBookDetails details)
         {
@@ -105,6 +139,7 @@ namespace AddressBookADO
             details.Email = "stef@gmail.com";
             return details;
         }
+       
     }
 }
 

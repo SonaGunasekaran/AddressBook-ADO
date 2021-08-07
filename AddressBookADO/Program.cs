@@ -12,6 +12,7 @@ namespace AddressBookADO
             repo.GetAllData();
             repo.InsertTable(details);
             repo.ReadData(details);
+            repo.EditDetails(details);
         }
     }
 }

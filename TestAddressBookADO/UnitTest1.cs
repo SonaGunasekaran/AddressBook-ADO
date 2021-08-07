@@ -19,6 +19,14 @@ namespace TestAddressBookADO
             int expected = 1;
             var actual = repo.InsertTable(details);
             Assert.AreEqual(expected, actual);
+        
+        }
+        [TestMethod]
+        public void EditingTheRecordTest()
+        {
+            int expected = 1;
+            int actual = repo.EditDetails(details);
+            Assert.AreEqual(expected, actual);
         }
     }
 }
