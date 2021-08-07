@@ -13,6 +13,7 @@ namespace AddressBookADO
             repo.InsertTable(details);
             repo.ReadData(details);
             repo.EditDetails(details);
+            repo.DeleteRecord();
         }
     }
 }
