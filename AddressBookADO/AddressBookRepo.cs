@@ -125,7 +125,41 @@ namespace AddressBookADO
             }
             return count;
         }
-    
+        public int DeleteRecord()
+        {
+            AddressBookDetails details = new AddressBookDetails();
+            int count = 0;
+            try
+            {
+                using (sqlConnection)
+                {
+                    
+                    string query = @"delete from Address_Book_Table where FirstName = 'Rachel' and LastName = 'Green'";
+                    SqlCommand sqlCommand = new SqlCommand(query, this.sqlConnection);
+                    sqlConnection.Open();
+                    int result = sqlCommand.ExecuteNonQuery();
+                    if (result != 0)
+                    {
+                        count++;
+                        Console.WriteLine("Deleted SuccessFully");
+
+                    }
+                }
+
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
+            finally
+            {
+                
+                sqlConnection.Close();
+            }
+            return count;
+
+        }
+
 
         public AddressBookDetails ReadData(AddressBookDetails details)
         {

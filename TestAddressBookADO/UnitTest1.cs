@@ -22,10 +22,17 @@ namespace TestAddressBookADO
         
         }
         [TestMethod]
-        public void EditingTheRecordTest()
+        public void TestEditDetails()
         {
             int expected = 1;
             int actual = repo.EditDetails(details);
+            Assert.AreEqual(expected, actual);
+        }
+        [TestMethod]
+        public void TestDeleteRecord()
+        {
+            int expected = 1;
+            int actual = repo.DeleteRecord();
             Assert.AreEqual(expected, actual);
         }
     }
