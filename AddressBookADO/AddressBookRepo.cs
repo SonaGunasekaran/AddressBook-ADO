@@ -171,8 +171,7 @@ namespace AddressBookADO
                 using (this.sqlConnection)
                 {
                     
-                    string query = @"Select FirstName from Address_Book_Table where City = 'Adol' or StateName = 'NewYork'";
-                    
+                    string query = @"Select FirstName from Address_Book_Table where City = 'Adol' or State = 'NewYork'";
                     SqlCommand sqlCommand = new SqlCommand(query, this.sqlConnection);
                     sqlConnection.Open();
                     int result = sqlCommand.ExecuteNonQuery();
@@ -203,16 +202,13 @@ namespace AddressBookADO
             string result = null;
             try
             {
-                using (sqlConnection)
+                using (this.sqlConnection)
                 {
                     
                     string query = @"Select Count(*) As TotalCount, State, City from Address_Book_Table group by State,City";
-                    
                     SqlCommand sqlCommand = new SqlCommand(query, this.sqlConnection);
-                   
-                    sqlConnection.Open();
+                    this.sqlConnection.Open();
                     int res = sqlCommand.ExecuteNonQuery();
-                    
                     SqlDataReader reader = sqlCommand.ExecuteReader();
                     if (reader.HasRows)
                     {
@@ -230,9 +226,43 @@ namespace AddressBookADO
             }
             finally
             {
-                sqlConnection.Close();
+                this.sqlConnection.Close();
             }
             return result;
+        }
+        public int SortByNameAndCity(AddressBookDetails details)
+        {
+            int count = 0;
+            try
+            {
+                using (this.sqlConnection)
+                {
+                    
+                    string query = @"Select FirstName from Address_Book_Table where City='NewYork' order by FirstName";
+                    SqlCommand sqlCommand = new SqlCommand(query, this.sqlConnection);
+                    this.sqlConnection.Open();
+                    int result = sqlCommand.ExecuteNonQuery();
+                    SqlDataReader reader = sqlCommand.ExecuteReader();
+                    if (reader.HasRows)
+                    {
+                        while (reader.Read())
+                        {
+                            count++;
+                            details.FirstName = Convert.ToString(reader["FirstName"]);
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            finally
+            {
+                
+               this.sqlConnection.Close();
+            }
+            return count;
         }
         public AddressBookDetails ReadData(AddressBookDetails details)
         {

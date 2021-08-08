@@ -38,16 +38,23 @@ namespace TestAddressBookADO
         [TestMethod]
         public void TestRetrieveDataCityAndState()
         {
-            int expected = 1;
+            int expected = 2;
             var actual = repo.RetrieveData(details);
             Assert.AreEqual(expected, actual);
         }
         [TestMethod]
         public void TestCountGroupByCityAndState()
         {
-            var expected = "Adol NewYork 1 Kindle NewJersy 1 Gago London 1 Boredom Mexico 1 Vietnam Paris 1 ";
+            var expected = "2 NewYork Adol 1 Canada Boredom 2 Mexico Cargo 1 London Gago 1 NewJersy Kindle ";
             
             var actual = repo.CountByStateAndCity(details);
+            Assert.AreEqual(expected, actual);
+        }
+        [TestMethod]
+        public void TestSortByNameAndCity()
+        {
+            int expected = 2;
+            var actual = repo.SortByNameAndCity(details);
             Assert.AreEqual(expected, actual);
         }
     }
