@@ -35,5 +35,13 @@ namespace TestAddressBookADO
             int actual = repo.DeleteRecord();
             Assert.AreEqual(expected, actual);
         }
+        [TestMethod]
+        public void TestMethodForRetrieveDataBasedOnCityAndState()
+        {
+            int expected = 2;
+            AddressBookDetails details = new AddressBookDetails();
+            var actual = repo.RetrieveData(details);
+            Assert.AreEqual(expected, actual);
+        }
     }
 }

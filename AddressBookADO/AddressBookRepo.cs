@@ -8,7 +8,7 @@ namespace AddressBookADO
 {
     public class AddressBookRepo
     {
-        public static string connectionString = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=Address_Book;Integrated Security=True;";
+        public static string connectionString = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=Address_Book;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False;";
         SqlConnection sqlConnection = new SqlConnection(connectionString);
         public void GetAllData()
         {
@@ -17,42 +17,46 @@ namespace AddressBookADO
             //retrieve the query
             AddressBookDetails details = new AddressBookDetails();
             string query = @"select * from dbo.Address_Book_Table";
-            try
+            using (this.sqlConnection)
             {
-                SqlCommand command = new SqlCommand(query, this.sqlConnection);
-                //returns data as rows
-                SqlDataReader reader = command.ExecuteReader();
-                if (reader.HasRows)
+                try
                 {
-                    while (reader.Read())
+                    SqlCommand command = new SqlCommand(query, this.sqlConnection);
+                    //returns data as rows
+                    SqlDataReader reader = command.ExecuteReader();
+                    if (reader.HasRows)
                     {
-                        details.Id = Convert.ToInt32(reader["id"]);
-                        details.FirstName = Convert.ToString(reader["FirstName"]);
-                        details.LastName = Convert.ToString(reader["LastName"]);
-                        details.Address = Convert.ToString(reader["Address"]);
-                        details.City = Convert.ToString(reader["City"]);
-                        details.State = Convert.ToString(reader["State"]);
-                        details.ZipCode = Convert.ToString(reader["ZipCode"]);
-                        details.PhoneNumber = Convert.ToDouble(reader["PhoneNumber"]);
-                        details.Email = Convert.ToString(reader["Email"]);
-                        Console.WriteLine("{0} {1} {2} {3} {4} {5} {6} {7}", details.FirstName, details.LastName, details.Address, details.City, details.State, details.ZipCode, details.PhoneNumber, details.Email);
-                        Console.WriteLine("\n");
+                        while (reader.Read())
+                        {
+                            details.Id = Convert.ToInt32(reader["id"]);
+                            details.FirstName = Convert.ToString(reader["FirstName"]);
+                            details.LastName = Convert.ToString(reader["LastName"]);
+                            details.Address = Convert.ToString(reader["Address"]);
+                            details.City = Convert.ToString(reader["City"]);
+                            details.State = Convert.ToString(reader["State"]);
+                            details.ZipCode = Convert.ToString(reader["ZipCode"]);
+                            details.PhoneNumber = Convert.ToDouble(reader["PhoneNumber"]);
+                            details.Email = Convert.ToString(reader["Email"]);
+                            Console.WriteLine("{0} {1} {2} {3} {4} {5} {6} {7}", details.FirstName, details.LastName, details.Address, details.City, details.State, details.ZipCode, details.PhoneNumber, details.Email);
+                            Console.WriteLine("\n");
+                        }
                     }
+                    else
+                    {
+                        Console.WriteLine("No data vailable");
+                    }
+                    reader.Close();
                 }
-                else
+
+                catch (Exception e)
                 {
-                    Console.WriteLine("No data vailable");
+                    Console.WriteLine(e.Message);
                 }
-                reader.Close();
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e.Message);
-            }
-            finally
-            {
-                //connection close
-                this.sqlConnection.Close();
+                finally
+                {
+                    //connection close
+                    this.sqlConnection.Close();
+                }
             }
         }
         public int InsertTable(AddressBookDetails details)
@@ -63,9 +67,9 @@ namespace AddressBookADO
                 try
                 {
 
-                    SqlCommand sqlCommand = new SqlCommand("dbo.InsertAddressBook", sqlConnection);
+                    SqlCommand sqlCommand = new SqlCommand("dbo.InsertAddressBook", this.sqlConnection);
                     sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
-                    sqlConnection.Open();
+                    this.sqlConnection.Open();
                     ReadData(details);
                     sqlCommand.Parameters.AddWithValue("@FirstName", details.FirstName);
                     sqlCommand.Parameters.AddWithValue("@LastName", details.LastName);
@@ -89,7 +93,7 @@ namespace AddressBookADO
                 }
                 finally
                 {
-                    sqlConnection.Close();
+                    this.sqlConnection.Close();
                 }
                 return count;
             }
@@ -97,6 +101,7 @@ namespace AddressBookADO
         public int EditDetails(AddressBookDetails details)
         {
             int count = 0;
+
 
             try
             {
@@ -106,7 +111,6 @@ namespace AddressBookADO
                     this.sqlConnection.Open();
                     string query = @"update Address_Book_Table set Address='MysticFalls'where FirstName='Damon'";
                     SqlCommand sqlCommand = new SqlCommand(query, this.sqlConnection);
-
                     int result = sqlCommand.ExecuteNonQuery();
                     if (result != 0)
                     {
@@ -133,7 +137,7 @@ namespace AddressBookADO
             {
                 using (sqlConnection)
                 {
-                    
+
                     string query = @"delete from Address_Book_Table where FirstName = 'Rachel' and LastName = 'Green'";
                     SqlCommand sqlCommand = new SqlCommand(query, this.sqlConnection);
                     sqlConnection.Open();
@@ -153,14 +157,48 @@ namespace AddressBookADO
             }
             finally
             {
-                
+
                 sqlConnection.Close();
             }
             return count;
 
         }
+        public int RetrieveData(AddressBookDetails details)
+        {
+            int count = 0;
+            try
+            {
+                using (this.sqlConnection)
+                {
+                    
+                    string query = @"Select FirstName,LastName from Address_Book_Table where City = 'Adol' or StateName = 'NewYork'";
+                    
+                    SqlCommand sqlCommand = new SqlCommand(query, this.sqlConnection);
+                    sqlConnection.Open();
+                    int result = sqlCommand.ExecuteNonQuery();
+                    SqlDataReader sqlDataReader = sqlCommand.ExecuteReader();
+                    if (sqlDataReader.HasRows)
+                    {
+                        while (sqlDataReader.Read())
+                        {
+                            count++;
+                            details.FirstName = Convert.ToString(sqlDataReader["FirstName"]);
+                            details.LastName = Convert.ToString(sqlDataReader["LastName"]);
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            finally
+            {
+                this.sqlConnection.Close();
+            }
+            return count;
 
-
+        }
         public AddressBookDetails ReadData(AddressBookDetails details)
         {
             details.FirstName = "Stefan";
@@ -173,8 +211,10 @@ namespace AddressBookADO
             details.Email = "stef@gmail.com";
             return details;
         }
-       
+
     }
-}
+} 
+
+
 
 
