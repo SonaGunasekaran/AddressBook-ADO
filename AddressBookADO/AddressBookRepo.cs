@@ -264,6 +264,41 @@ namespace AddressBookADO
             }
             return count;
         }
+        public int FindAddressBookByTypeAndName(AddressBookDetails details)
+        {
+            int count = 0;
+            try
+            {
+                using (this.sqlConnection)
+                {
+
+                    string query = @"Select FirstName from Address_Book_Table where AddressBookType='Friends'";
+                    SqlCommand sqlCommand = new SqlCommand(query, this.sqlConnection);
+                    this.sqlConnection.Open();
+                    int result = sqlCommand.ExecuteNonQuery();
+                    SqlDataReader reader = sqlCommand.ExecuteReader();
+                    if (reader.HasRows)
+                    {
+                        while (reader.Read())
+                        {
+                            count++;
+                            details.FirstName = Convert.ToString(reader["FirstName"]);
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            finally
+            {
+
+                this.sqlConnection.Close();
+            }
+            return count;
+        }
+
         public AddressBookDetails ReadData(AddressBookDetails details)
         {
             details.FirstName = "Stefan";

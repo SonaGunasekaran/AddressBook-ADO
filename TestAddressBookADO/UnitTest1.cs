@@ -57,5 +57,12 @@ namespace TestAddressBookADO
             var actual = repo.SortByNameAndCity(details);
             Assert.AreEqual(expected, actual);
         }
+        [TestMethod]
+        public void TestFindAddressBookByTypeAndName()
+        {
+            var expected = "Chandler";
+            var actual = repo.FindAddressBookByTypeAndName(details);
+            Assert.AreEqual(expected, actual);
+        }
     }
 }
