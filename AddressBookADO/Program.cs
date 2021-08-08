@@ -38,6 +38,9 @@ namespace AddressBookADO
                 case 7:
                     repo.SortByNameAndCity(details);
                     break;
+                case 8:
+                    repo.FindAddressBookByTypeAndName(details);
+                    break;
                 default:
                     break;
             }
