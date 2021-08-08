@@ -65,11 +65,19 @@ namespace TestAddressBookADO
             Assert.AreEqual(expected, actual);
         }
         [TestMethod]
-        public void TestMethodForCountRelationType()
+        public void TestCountAddressBookType()
         {
             var expected = "Family 1 Friends 2 Profession ";
             var actual = repo.CountAddressBookType(details);
             Assert.AreEqual(expected, actual);
         }
+        [TestMethod]
+        public void TestInsertTypeTable()
+        {
+           int expected = 1;
+           int actual = repo.InsertTypeTable(details);
+            Assert.AreEqual(expected, actual);
+        }
+
     }
 }

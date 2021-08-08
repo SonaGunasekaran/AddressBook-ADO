@@ -331,17 +331,58 @@ namespace AddressBookADO
             }
             return result;
         }
+        public int InsertTypeTable(AddressBookDetails details)
+        {
+            int count = 0;
+            using (sqlConnection)
+            {
+                try
+                {
+
+                    SqlCommand sqlCommand = new SqlCommand("dbo.InsertAddressBookType", this.sqlConnection);
+                    sqlCommand.CommandType = System.Data.CommandType.StoredProcedure;
+                    this.sqlConnection.Open();
+                    ReadData(details);
+                    sqlCommand.Parameters.AddWithValue("@FirstName", details.FirstName);
+                    sqlCommand.Parameters.AddWithValue("@LastName", details.LastName);
+                    sqlCommand.Parameters.AddWithValue("@Address", details.Address);
+                    sqlCommand.Parameters.AddWithValue("@City", details.City);
+                    sqlCommand.Parameters.AddWithValue("@State", details.State);
+                    sqlCommand.Parameters.AddWithValue("@ZipCode", details.ZipCode);
+                    sqlCommand.Parameters.AddWithValue("@PhoneNumber", details.PhoneNumber);
+                    sqlCommand.Parameters.AddWithValue("@Email", details.Email);
+                    sqlCommand.Parameters.AddWithValue("@AddressBookType", details.AddressBookType);
+                    int result = sqlCommand.ExecuteNonQuery();
+                    if (result != 0)
+                    {
+                        count++;
+                        Console.WriteLine("Inserted Successfully");
+                    }
+
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.Message);
+                }
+                finally
+                {
+                    this.sqlConnection.Close();
+                }
+                return count;
+            }
+        }
 
         public AddressBookDetails ReadData(AddressBookDetails details)
         {
-            details.FirstName = "Stefan";
-            details.LastName = "Salvatore";
-            details.Address = "Seattle";
-            details.City = "Cargo";
-            details.State = "Mexico";
-            details.ZipCode = "1234560";
-            details.PhoneNumber = 987654312;
-            details.Email = "stef@gmail.com";
+            details.FirstName = "Chandler";
+            details.LastName = "Bing";
+            details.Address = "CentralPark";
+            details.City = "Adol";
+            details.State = "NewYork";
+            details.ZipCode = "12345";
+            details.PhoneNumber = 1234567;
+            details.Email = "chan@gmail.com";
+            details.AddressBookType = "Profession";
             return details;
         }
 
