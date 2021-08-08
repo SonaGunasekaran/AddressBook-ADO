@@ -8,7 +8,7 @@ namespace AddressBookADO
         static void Main(string[] args)
         {
             Console.WriteLine("Address Book ADO!");
-            Console.WriteLine("1.Retrive all data\n2.Update salary\n3.Retirieve Date using Name\n4.Aggregate Functions");
+            Console.WriteLine("1.Retrive all data\n2.Insert into Table\n3.Edit Details\n4.Delete Records using name\n5.Retrieve data based on city or state\n6.Count data based on city or state ");
             Console.Write("Enter your choice:");
             int choice = Convert.ToInt32(Console.ReadLine());
             AddressBookRepo repo = new AddressBookRepo();
@@ -25,20 +25,18 @@ namespace AddressBookADO
                     break;
                 case 3:
                     repo.EditDetails(details);
-
                     break;
                 case 4:
-                    repo.GetAllData();
                     repo.DeleteRecord();
                     break;
                 case 5:
-                    repo.GetAllData();
                     repo.RetrieveData(details);
                     break;
-
+                case 6:
+                    repo.CountByStateAndCity(details);
+                    break;
                 default:
                     break;
-
             }
         }
     }

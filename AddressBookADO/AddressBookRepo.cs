@@ -8,7 +8,7 @@ namespace AddressBookADO
 {
     public class AddressBookRepo
     {
-        public static string connectionString = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=Address_Book;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False;";
+        public static string connectionString = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=Address_Book;Integrated Security=True;";
         SqlConnection sqlConnection = new SqlConnection(connectionString);
         public void GetAllData()
         {
@@ -171,19 +171,18 @@ namespace AddressBookADO
                 using (this.sqlConnection)
                 {
                     
-                    string query = @"Select FirstName,LastName from Address_Book_Table where City = 'Adol' or StateName = 'NewYork'";
+                    string query = @"Select FirstName from Address_Book_Table where City = 'Adol' or StateName = 'NewYork'";
                     
                     SqlCommand sqlCommand = new SqlCommand(query, this.sqlConnection);
                     sqlConnection.Open();
                     int result = sqlCommand.ExecuteNonQuery();
-                    SqlDataReader sqlDataReader = sqlCommand.ExecuteReader();
-                    if (sqlDataReader.HasRows)
+                    SqlDataReader reader = sqlCommand.ExecuteReader();
+                    if (reader.HasRows)
                     {
-                        while (sqlDataReader.Read())
+                        while (reader.Read())
                         {
                             count++;
-                            details.FirstName = Convert.ToString(sqlDataReader["FirstName"]);
-                            details.LastName = Convert.ToString(sqlDataReader["LastName"]);
+                            details.FirstName = Convert.ToString(reader["FirstName"]);
                         }
                     }
                 }
@@ -198,6 +197,42 @@ namespace AddressBookADO
             }
             return count;
 
+        }
+        public string CountByStateAndCity(AddressBookDetails details)
+        {
+            string result = null;
+            try
+            {
+                using (sqlConnection)
+                {
+                    
+                    string query = @"Select Count(*) As TotalCount, State, City from Address_Book_Table group by State,City";
+                    
+                    SqlCommand sqlCommand = new SqlCommand(query, this.sqlConnection);
+                   
+                    sqlConnection.Open();
+                    int res = sqlCommand.ExecuteNonQuery();
+                    
+                    SqlDataReader reader = sqlCommand.ExecuteReader();
+                    if (reader.HasRows)
+                    {
+                        while (reader.Read())
+                        {
+
+                           result += reader[0] + " " + reader[1] + " " + reader[2] + " ";
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            finally
+            {
+                sqlConnection.Close();
+            }
+            return result;
         }
         public AddressBookDetails ReadData(AddressBookDetails details)
         {

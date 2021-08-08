@@ -36,11 +36,18 @@ namespace TestAddressBookADO
             Assert.AreEqual(expected, actual);
         }
         [TestMethod]
-        public void TestMethodForRetrieveDataBasedOnCityAndState()
+        public void TestRetrieveDataCityAndState()
         {
-            int expected = 2;
-            AddressBookDetails details = new AddressBookDetails();
+            int expected = 1;
             var actual = repo.RetrieveData(details);
+            Assert.AreEqual(expected, actual);
+        }
+        [TestMethod]
+        public void TestCountGroupByCityAndState()
+        {
+            var expected = "Adol NewYork 1 Kindle NewJersy 1 Gago London 1 Boredom Mexico 1 Vietnam Paris 1 ";
+            
+            var actual = repo.CountByStateAndCity(details);
             Assert.AreEqual(expected, actual);
         }
     }
