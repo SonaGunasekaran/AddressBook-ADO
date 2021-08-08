@@ -60,8 +60,15 @@ namespace TestAddressBookADO
         [TestMethod]
         public void TestFindAddressBookByTypeAndName()
         {
-            var expected = "Chandler";
+            int expected = 2;
             var actual = repo.FindAddressBookByTypeAndName(details);
+            Assert.AreEqual(expected, actual);
+        }
+        [TestMethod]
+        public void TestMethodForCountRelationType()
+        {
+            var expected = "Family 1 Friends 2 Profession ";
+            var actual = repo.CountAddressBookType(details);
             Assert.AreEqual(expected, actual);
         }
     }

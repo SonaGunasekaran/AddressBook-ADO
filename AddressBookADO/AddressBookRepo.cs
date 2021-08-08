@@ -170,7 +170,7 @@ namespace AddressBookADO
             {
                 using (this.sqlConnection)
                 {
-                    
+
                     string query = @"Select FirstName from Address_Book_Table where City = 'Adol' or State = 'NewYork'";
                     SqlCommand sqlCommand = new SqlCommand(query, this.sqlConnection);
                     sqlConnection.Open();
@@ -204,7 +204,7 @@ namespace AddressBookADO
             {
                 using (this.sqlConnection)
                 {
-                    
+
                     string query = @"Select Count(*) As TotalCount, State, City from Address_Book_Table group by State,City";
                     SqlCommand sqlCommand = new SqlCommand(query, this.sqlConnection);
                     this.sqlConnection.Open();
@@ -215,7 +215,7 @@ namespace AddressBookADO
                         while (reader.Read())
                         {
 
-                           result += reader[0] + " " + reader[1] + " " + reader[2] + " ";
+                            result += reader[0] + " " + reader[1] + " " + reader[2] + " ";
                         }
                     }
                 }
@@ -237,7 +237,7 @@ namespace AddressBookADO
             {
                 using (this.sqlConnection)
                 {
-                    
+
                     string query = @"Select FirstName from Address_Book_Table where City='NewYork' order by FirstName";
                     SqlCommand sqlCommand = new SqlCommand(query, this.sqlConnection);
                     this.sqlConnection.Open();
@@ -259,8 +259,8 @@ namespace AddressBookADO
             }
             finally
             {
-                
-               this.sqlConnection.Close();
+
+                this.sqlConnection.Close();
             }
             return count;
         }
@@ -298,6 +298,39 @@ namespace AddressBookADO
             }
             return count;
         }
+        public string CountAddressBookType(AddressBookDetails details)
+        {
+            string result = null;
+            try
+            {
+                using (sqlConnection)
+                {
+
+                    string query = @"Select count(*) as Type, AddressBookType from Address_Book_Table group by AddressBookType";
+                    SqlCommand sqlCommand = new SqlCommand(query, this.sqlConnection);
+                    sqlConnection.Open();
+                    int res = sqlCommand.ExecuteNonQuery();
+                    SqlDataReader reader = sqlCommand.ExecuteReader();
+                    if (reader.HasRows)
+                    {
+                        while (reader.Read())
+                        {
+                            result += reader[0] + " " + reader[1] + " ";
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            finally
+            {
+
+                sqlConnection.Close();
+            }
+            return result;
+        }
 
         public AddressBookDetails ReadData(AddressBookDetails details)
         {
@@ -313,7 +346,7 @@ namespace AddressBookADO
         }
 
     }
-} 
+}
 
 
 
